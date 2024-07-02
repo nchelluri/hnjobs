@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title class="title">{{.Title}}</title>
+  <link href="who-is-hiring.css" rel="stylesheet">
+  <meta charset="utf-8">
+</head>
+<body>
+  <h1 class="title"><a href="https://news.ycombinator.com/item?id={{.ID}}">{{.Title}}</a></h1>
+  <div id="text">{{.Text}}</div>
+
+  <hr>
+
+  <div class="filter">
+    <button id="remote">Remote</button>
+    <button id="intern">Interns</button>
+    <button id="visa">Visa</button>
+
+    <br/>
+
+    <label>
+      Case insensitive filtering:
+      <input id="query" type="text" placeholder="hit enter to activate the filter" />
+      Filters can be string literals or JS regular expressions (do not use surrounding slashes).
+    </label>
+  </div>
+
+  <hr>
+
+  <div class="removed">
+    <button id="restoreAllRemoved">Restore All Removed Items</button>
+  </div>
+
+  <hr>
+
+  <div class="comments">
+    {{range .Comments}}
+      {{if or .Dead .Deleted}}
+        {{continue}}
+      {{end}}
+
+      <div
+        class="content {{if .Remote}} remote {{end}}{{if .Interns}} interns {{end}}{{if .Visa}} visa {{end}}"
+        {{if gt .Level 0 }}style="margin-left: {{spacer .Level}}px"{{end}}
+        id="comment_{{.ID}}"
+      >
+        <div class="close">&times;</div>
+        <strong>by <a href="https://news.ycombinator.com/user?id={{.By}}">{{.By}}</a></strong>
+        <small><a href="https://news.ycombinator.com/item?id={{.ID}}">Original Post</a> {{ts .Time}}</small>
+        <br><br>
+
+        {{.Text}}
+      </div>
+    {{end}}
+  </div>
+
+  <script>
+var comments = document.getElementsByClassName('comments')[0].getElementsByClassName('content');
+
+function filterButton(hiddenKlass, initialText, afterText, keyword) {
+  return function filter(e) {
+    var button = e.currentTarget;
+
+    if (button.innerText == initialText) {
+      for (var i = 0; i < comments.length; i++) {
+        if (! comments[i].classList.contains(keyword)) {
+          comments[i].classList.add(hiddenKlass);
+        }
+      }
+
+      button.innerText = afterText;
+    } else {
+      for (var i = 0; i < comments.length; i++) {
+        comments[i].classList.remove(hiddenKlass);
+      }
+
+      button.innerText = initialText;
+    }
+  };
+}
+
+document.getElementById('remote').addEventListener('click', filterButton('remoteHidden', 'Remote', 'Remote & Onsite', 'remote'));
+document.getElementById('intern').addEventListener('click', filterButton('internsHidden', 'Interns', 'Interns & FT', 'interns'));
+document.getElementById('visa').addEventListener('click', filterButton('visaHidden', 'Visa', 'Visa & Non-Visa', 'visa'));
+
+document.getElementById('query').addEventListener('change', function(e) {
+  var textField = e.currentTarget;
+  var hiddenKlass = 'queryHidden';
+
+  if (textField.value === '') {
+    for (var i = 0; i < comments.length; i++) {
+      comments[i].classList.remove(hiddenKlass);
+    }
+  } else {
+    for (var i = 0; i < comments.length; i++) {
+      if (! comments[i].innerText.match(new RegExp(textField.value, 'i'))) {
+        comments[i].classList.add(hiddenKlass);
+      }
+    }
+  }
+});
+
+document.addEventListener('click', function(e) {
+  var target = e.target;
+
+  if (target.tagName == 'DIV' && target.classList.contains('close')) {
+    if (target.parentNode.id) {
+      var removed = localStorage.getItem('removed');
+
+      if (! removed) {
+        removed = {};
+      } else {
+        removed = JSON.parse(removed);
+      }
+
+      removed[target.parentNode.id] = true;
+
+      localStorage.setItem("removed", JSON.stringify(removed));
+    }
+
+    target.parentNode.parentNode.removeChild(target.parentNode);
+  }
+});
+
+document.getElementById('restoreAllRemoved').addEventListener('click', function() {
+  localStorage.setItem('removed', JSON.stringify({}));
+  window.location.reload();
+});
+
+var removed = localStorage.getItem('removed');
+if (removed) {
+  removed = JSON.parse(removed);
+  Object.keys(removed).forEach(function(id) {
+    var comment = document.getElementById(id);
+    if (comment) {
+      comment.parentNode.removeChild(comment);
+    }
+  });
+}
+
+  </script>
+</body>
+</html>
