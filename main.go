@@ -16,7 +16,7 @@ import (
 func main() {
 	tfm := template.FuncMap{
 		"ts": func(u int64) string {
-			return time.Unix(u, 0).Format(time.RFC3339)
+			return time.Unix(u, 0).Format(time.RFC822)
 		},
 		"spacer": func(l uint) uint {
 			return 20 * l
