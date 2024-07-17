@@ -1,12 +1,11 @@
 # hnjobs
-HackerNews "Who is hiring?" Browser
+hnjobs is a private [Hacker News](https://news.ycombinator.com/) ["Who is hiring?"](https://news.ycombinator.com/user?id=whoishiring) thread filter and search tool. It lists all of the posts on a "Who is hiring?" thread and provides buttons to filter for "Remote", "Interns" and "Visa" jobs, an input box for ad-hoc (case-insensitive) filtering of posts using [Javascript regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions), the ability to remove posts from the post listing, and the ability to restore all removed posts.
 
-Creates an HTML page listing all the postings from "Who is hiring?" stories, with buttons to filter for "Remote", "Interns" and "Visa" jobs. Also includes an input box for ad-hoc case-insensitive filtering of posts using JS regular expressions, the ability to remove posts from the listing, and the ability to restore all removed posts.
+## Deployed instance
+A deployment of the tool is live at https://nchelluri.github.io/hnjobs/ and is updated once an hour for the first ten days of each month.
 
-Fetches data from the HN Firebase API.
+## Running locally
+You can run the program locally with the command `go run .` which will generate a file called `index.html` that you can view in your web browser.
 
-All data is stored locally. No data about any filters you use, links you click, posts you remove from the listing, etc., are ever sent anywhere. There are no analytics.
-
-Run it by running `go run .`. It will generate a file called `index.html` that you can view in your web browser.
-
-This is a Go port of the Ruby version: https://github.com/nchelluri/who-is-hiring
+## Privacy
+All data is stored locally using [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). No data about any filters you use, links you click, posts you remove from the listing, etc., is ever sent anywhere. There are no analytics.
