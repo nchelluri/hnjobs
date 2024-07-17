@@ -35,10 +35,6 @@
 
   <div class="comments">
     {{range .Comments}}
-      {{if or .Dead .Deleted}}
-        {{continue}}
-      {{end}}
-
       <div
         class="content {{if .Remote}} remote {{end}}{{if .Interns}} interns {{end}}{{if .Visa}} visa {{end}}"
         {{if gt .Level 0 }}style="margin-left: {{spacer .Level}}px"{{end}}

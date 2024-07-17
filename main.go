@@ -152,6 +152,10 @@ func getComments(id, level uint) ([]comment, error) {
 		return nil, fmt.Errorf("error unmarshaling comment %d JSON: %w", id, err)
 	}
 
+	if c.Dead || c.Deleted {
+		return nil, nil
+	}
+
 	lowText := strings.ToLower(string(c.Text))
 	if strings.Contains(lowText, "remote") {
 		c.Remote = true
@@ -193,7 +197,7 @@ func getStory(id uint) (story, error) {
 
 	for i, kid := range s.Kids {
 		if i%25 == 0 {
-			fmt.Printf("Getting comment %d...\n", i+1)
+			fmt.Printf("Getting top-level comment %d...\n", i+1)
 		}
 		cs, err := getComments(kid, 0)
 		if err != nil {
