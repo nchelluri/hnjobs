@@ -7,6 +7,6 @@ Fetches data from the HN Firebase API.
 
 All data is stored locally. No data about any filters you use, links you click, posts you remove from the listing, etc., are ever sent anywhere. There are no analytics.
 
-Run it by running `go run .`. It will generate a file called `who-is-hiring.html` that you can view in your web browser.
+Run it by running `go run .`. It will generate a file called `index.html` that you can view in your web browser.
 
 This is a Go port of the Ruby version: https://github.com/nchelluri/who-is-hiring

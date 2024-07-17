@@ -42,7 +42,7 @@ func main() {
 	}
 	fmt.Println("Got story.")
 
-	const filename string = "who-is-hiring.html"
+	const filename string = "index.html"
 	f, err := os.Create(filename)
 	if err != nil {
 		log.Fatalf("Error creating %s: %v", filename, err)
