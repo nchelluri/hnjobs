@@ -133,12 +133,13 @@ type comment struct {
 }
 
 type story struct {
-	ID       uint `json:"id"`
-	Title    string
-	Text     template.HTML
-	By       string
-	Kids     []uint
-	Comments []comment
+	ID        uint `json:"id"`
+	Title     string
+	Text      template.HTML
+	By        string
+	Kids      []uint
+	Comments  []comment
+	FetchedAt int64
 }
 
 func getComments(id, level uint) ([]comment, error) {
@@ -185,6 +186,8 @@ func getComments(id, level uint) ([]comment, error) {
 }
 
 func getStory(id uint) (story, error) {
+	now := time.Now()
+
 	storyJSON, err := getItem(id)
 	if err != nil {
 		return story{}, fmt.Errorf("error getting story %d JSON: %w", id, err)
@@ -206,6 +209,8 @@ func getStory(id uint) (story, error) {
 
 		s.Comments = append(s.Comments, cs...)
 	}
+
+	s.FetchedAt = now.Unix()
 
 	return s, nil
 }
