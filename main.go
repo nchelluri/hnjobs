@@ -130,6 +130,8 @@ type comment struct {
 	Remote  bool
 	Interns bool
 	Visa    bool
+	NextID  uint
+	PrevID  uint
 }
 
 type story struct {
@@ -205,6 +207,16 @@ func getStory(id uint) (story, error) {
 		cs, err := getComments(kid, 0)
 		if err != nil {
 			return story{}, fmt.Errorf("error getting story comments rooted at %d: %w", kid, err)
+		}
+
+		if len(cs) > 0 {
+			if i > 0 {
+				cs[0].PrevID = s.Kids[i-1]
+			}
+
+			if i < len(s.Kids)-1 {
+				cs[0].NextID = s.Kids[i+1]
+			}
 		}
 
 		s.Comments = append(s.Comments, cs...)

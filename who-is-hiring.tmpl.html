@@ -43,6 +43,11 @@
         <div class="close">&times;</div>
         <strong>by <a href="https://news.ycombinator.com/user?id={{.By}}">{{.By}}</a></strong>
         <small><a href="https://news.ycombinator.com/item?id={{.ID}}">Original Post</a> {{ts .Time}}</small>
+
+        {{if or (gt .PrevID 0) (gt .NextID 0)}} | {{end}}
+        {{if gt .PrevID 0}}<a href="#" class="scrolly" data-scroll-to-id="comment_{{.PrevID}}">Prev</a>{{end}}
+        {{if and (gt .PrevID 0) (gt .NextID 0)}} | {{end}}
+        {{if gt .NextID 0}}<a href="#" class="scrolly" data-scroll-to-id="comment_{{.NextID}}">Next</a>{{end}}
         <br><br>
 
         {{.Text}}
@@ -117,6 +122,13 @@ document.addEventListener('click', function(e) {
     }
 
     target.parentNode.parentNode.removeChild(target.parentNode);
+  } else if (target.tagName == 'A' && target.classList.contains('scrolly')) {
+    if (target.dataset.scrollToId) {
+      var el = document.getElementById(target.dataset.scrollToId);
+      el.scrollIntoView({ behavior: 'smooth' });
+
+      e.preventDefault();
+    }
   }
 });
 
