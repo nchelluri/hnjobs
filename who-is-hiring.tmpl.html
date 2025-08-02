@@ -86,6 +86,7 @@ document.getElementById('remote').addEventListener('click', filterButton('remote
 document.getElementById('intern').addEventListener('click', filterButton('internsHidden', 'Interns', 'Interns & FT', 'interns'));
 document.getElementById('visa').addEventListener('click', filterButton('visaHidden', 'Visa', 'Visa & Non-Visa', 'visa'));
 
+document.getElementById('query').value = ''; // clear it out on page load; it might have text in it that's not relevant after refresh
 document.getElementById('query').addEventListener('change', function(e) {
   var textField = e.currentTarget;
   var hiddenKlass = 'queryHidden';
