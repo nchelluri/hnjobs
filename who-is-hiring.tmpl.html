@@ -125,7 +125,39 @@ document.addEventListener('click', function(e) {
   } else if (target.tagName == 'A' && target.classList.contains('scrolly')) {
     if (target.dataset.scrollToId) {
       var el = document.getElementById(target.dataset.scrollToId);
-      el.scrollIntoView({ behavior: 'smooth' });
+
+      // If the target element is hidden or doesn't exist, find the next visible one
+      if (!el || el.offsetParent === null || el.style.display === 'none' ||
+          el.classList.contains('remoteHidden') || el.classList.contains('internsHidden') ||
+          el.classList.contains('visaHidden') || el.classList.contains('queryHidden')) {
+
+        // Determine direction based on link text
+        var isNext = target.innerText === 'Next';
+        var currentComment = target.closest('.content');
+        var allComments = Array.from(comments);
+        var currentIndex = allComments.indexOf(currentComment);
+
+        // Search for next visible comment
+        if (currentIndex !== -1) {
+          var step = isNext ? 1 : -1;
+          for (var i = currentIndex + step; i >= 0 && i < allComments.length; i += step) {
+            var candidateEl = allComments[i];
+            // Check if element is visible
+            if (candidateEl.offsetParent !== null && candidateEl.style.display !== 'none' &&
+                !candidateEl.classList.contains('remoteHidden') &&
+                !candidateEl.classList.contains('internsHidden') &&
+                !candidateEl.classList.contains('visaHidden') &&
+                !candidateEl.classList.contains('queryHidden')) {
+              el = candidateEl;
+              break;
+            }
+          }
+        }
+      }
+
+      if (el && el.offsetParent !== null) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
 
       e.preventDefault();
     }
