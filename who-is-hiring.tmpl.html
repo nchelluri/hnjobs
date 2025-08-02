@@ -4,6 +4,7 @@
   <title class="title">{{.Title}}</title>
   <link href="who-is-hiring.css" rel="stylesheet">
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
   <h1 class="title"><a href="https://news.ycombinator.com/item?id={{.ID}}">{{.Title}}</a></h1>
@@ -44,7 +45,6 @@
         <strong>by <a href="https://news.ycombinator.com/user?id={{.By}}">{{.By}}</a></strong>
         <small><a href="https://news.ycombinator.com/item?id={{.ID}}">Original Post</a> {{ts .Time}}</small>
 
-        {{if or (gt .PrevID 0) (gt .NextID 0)}} | {{end}}
         {{if gt .PrevID 0}}<a href="#" class="scrolly" data-scroll-to-id="comment_{{.PrevID}}">Prev</a>{{end}}
         {{if and (gt .PrevID 0) (gt .NextID 0)}} | {{end}}
         {{if gt .NextID 0}}<a href="#" class="scrolly" data-scroll-to-id="comment_{{.NextID}}">Next</a>{{end}}
@@ -55,7 +55,7 @@
     {{end}}
   </div>
 
-  <footer>The content for this page was fetched at {{ts .FetchedAt}}. The code for this tool is on <a href="https://github.com/nchelluri/hnjobs">GitHub</a>.</footer>
+  <footer class="footer">The content for this page was fetched at {{ts .FetchedAt}}.<br>The code for this tool is on <a href="https://github.com/nchelluri/hnjobs">GitHub</a>.</footer>
 
   <script>
 var comments = document.getElementsByClassName('comments')[0].getElementsByClassName('content');
