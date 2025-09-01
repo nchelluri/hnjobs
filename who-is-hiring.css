@@ -236,6 +236,13 @@ pre {
     color: #e74c3c;
 }
 
+/* Prevent link overflow */
+a {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .title {
@@ -265,6 +272,18 @@ pre {
     .comments .content {
         padding: 0.8rem;
         margin: 0.5rem 0;
+    }
+
+    /* Additional overflow prevention for mobile */
+    .comments .content,
+    #text {
+        overflow-x: hidden;
+    }
+
+    .comments .content a,
+    #text a {
+        display: inline-block;
+        max-width: 100%;
     }
 }
 
