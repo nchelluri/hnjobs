@@ -60,7 +60,19 @@
   <script>
 var comments = document.getElementsByClassName('comments')[0].getElementsByClassName('content');
 
-function filterButton(hiddenKlass, initialText, afterText, keyword) {
+// URL query string utilities using URLSearchParams
+function updateQueryParam(key, value) {
+  var params = new URLSearchParams(window.location.search);
+  if (value === null || value === '') {
+    params.delete(key);
+  } else {
+    params.set(key, value);
+  }
+  var newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+  window.history.replaceState(null, '', newUrl);
+}
+
+function filterButton(hiddenKlass, initialText, afterText, keyword, paramKey) {
   return function filter(e) {
     var button = e.currentTarget;
 
@@ -72,21 +84,44 @@ function filterButton(hiddenKlass, initialText, afterText, keyword) {
       }
 
       button.innerText = afterText;
+      updateQueryParam(paramKey, '1');
     } else {
       for (var i = 0; i < comments.length; i++) {
         comments[i].classList.remove(hiddenKlass);
       }
 
       button.innerText = initialText;
+      updateQueryParam(paramKey, null);
     }
   };
 }
 
-document.getElementById('remote').addEventListener('click', filterButton('remoteHidden', 'Remote', 'Remote & Onsite', 'remote'));
-document.getElementById('intern').addEventListener('click', filterButton('internsHidden', 'Interns', 'Interns & FT', 'interns'));
-document.getElementById('visa').addEventListener('click', filterButton('visaHidden', 'Visa', 'Visa & Non-Visa', 'visa'));
+function applyButtonFilter(buttonId, hiddenKlass, initialText, afterText, keyword) {
+  var button = document.getElementById(buttonId);
+  for (var i = 0; i < comments.length; i++) {
+    if (! comments[i].classList.contains(keyword)) {
+      comments[i].classList.add(hiddenKlass);
+    }
+  }
+  button.innerText = afterText;
+}
 
-document.getElementById('query').value = ''; // clear it out on page load; it might have text in it that's not relevant after refresh
+function applyQueryFilter(query) {
+  var textField = document.getElementById('query');
+  var hiddenKlass = 'queryHidden';
+  textField.value = query;
+  for (var i = 0; i < comments.length; i++) {
+    if (! comments[i].innerText.match(new RegExp(query, 'i'))) {
+      comments[i].classList.add(hiddenKlass);
+    }
+  }
+}
+
+document.getElementById('remote').addEventListener('click', filterButton('remoteHidden', 'Remote', 'Remote & Onsite', 'remote', 'remote'));
+document.getElementById('intern').addEventListener('click', filterButton('internsHidden', 'Interns', 'Interns & FT', 'interns', 'interns'));
+document.getElementById('visa').addEventListener('click', filterButton('visaHidden', 'Visa', 'Visa & Non-Visa', 'visa', 'visa'));
+
+document.getElementById('query').value = '';
 document.getElementById('query').addEventListener('change', function(e) {
   var textField = e.currentTarget;
   var hiddenKlass = 'queryHidden';
@@ -95,12 +130,14 @@ document.getElementById('query').addEventListener('change', function(e) {
     for (var i = 0; i < comments.length; i++) {
       comments[i].classList.remove(hiddenKlass);
     }
+    updateQueryParam('q', null);
   } else {
     for (var i = 0; i < comments.length; i++) {
       if (! comments[i].innerText.match(new RegExp(textField.value, 'i'))) {
         comments[i].classList.add(hiddenKlass);
       }
     }
+    updateQueryParam('q', textField.value);
   }
 });
 
@@ -179,6 +216,21 @@ if (removed) {
       comment.parentNode.removeChild(comment);
     }
   });
+}
+
+// Apply filters from URL on page load
+var params = new URLSearchParams(window.location.search);
+if (params.get('remote') === '1') {
+  applyButtonFilter('remote', 'remoteHidden', 'Remote', 'Remote & Onsite', 'remote');
+}
+if (params.get('interns') === '1') {
+  applyButtonFilter('intern', 'internsHidden', 'Interns', 'Interns & FT', 'interns');
+}
+if (params.get('visa') === '1') {
+  applyButtonFilter('visa', 'visaHidden', 'Visa', 'Visa & Non-Visa', 'visa');
+}
+if (params.get('q')) {
+  applyQueryFilter(params.get('q'));
 }
 
   </script>
