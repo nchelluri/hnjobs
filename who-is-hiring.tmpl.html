@@ -50,7 +50,7 @@
         {{if gt .NextID 0}}<a href="#" class="scrolly" data-scroll-to-id="comment_{{.NextID}}">Next</a>{{end}}
         <br/><br/>
 
-        {{.Text}}
+        <div class="post-text">{{.Text}}</div>
       </div>
     {{end}}
   </div>
@@ -121,13 +121,17 @@ function makeMatcher(query) {
   }
 }
 
+function postText(comment) {
+  return comment.getElementsByClassName('post-text')[0].innerText;
+}
+
 function applyQueryFilter(query) {
   var textField = document.getElementById('query');
   var hiddenKlass = 'queryHidden';
   textField.value = query;
   var matches = makeMatcher(query);
   for (var i = 0; i < comments.length; i++) {
-    if (! matches(comments[i].innerText)) {
+    if (! matches(postText(comments[i]))) {
       comments[i].classList.add(hiddenKlass);
     }
   }
@@ -151,7 +155,7 @@ document.getElementById('query').addEventListener('change', function(e) {
     var matches = makeMatcher(textField.value);
     for (var i = 0; i < comments.length; i++) {
       comments[i].classList.remove(hiddenKlass);
-      if (! matches(comments[i].innerText)) {
+      if (! matches(postText(comments[i]))) {
         comments[i].classList.add(hiddenKlass);
       }
     }
