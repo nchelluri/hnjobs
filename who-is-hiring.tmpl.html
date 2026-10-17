@@ -106,12 +106,28 @@ function applyButtonFilter(buttonId, hiddenKlass, initialText, afterText, keywor
   button.innerText = afterText;
 }
 
+function makeMatcher(query) {
+  try {
+    var re = new RegExp(query, 'i');
+    return function(text) {
+      return re.test(text);
+    };
+  } catch (e) {
+    // Invalid regex. Treat it as case-insensitive literal.
+    var lower = query.toLowerCase();
+    return function(text) {
+      return text.toLowerCase().includes(lower);
+    };
+  }
+}
+
 function applyQueryFilter(query) {
   var textField = document.getElementById('query');
   var hiddenKlass = 'queryHidden';
   textField.value = query;
+  var matches = makeMatcher(query);
   for (var i = 0; i < comments.length; i++) {
-    if (! comments[i].innerText.match(new RegExp(query, 'i'))) {
+    if (! matches(comments[i].innerText)) {
       comments[i].classList.add(hiddenKlass);
     }
   }
@@ -132,8 +148,10 @@ document.getElementById('query').addEventListener('change', function(e) {
     }
     updateQueryParam('q', null);
   } else {
+    var matches = makeMatcher(textField.value);
     for (var i = 0; i < comments.length; i++) {
-      if (! comments[i].innerText.match(new RegExp(textField.value, 'i'))) {
+      comments[i].classList.remove(hiddenKlass);
+      if (! matches(comments[i].innerText)) {
         comments[i].classList.add(hiddenKlass);
       }
     }
