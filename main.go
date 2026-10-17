@@ -80,6 +80,10 @@ func getStoryID() (uint, error) {
 			return 0, fmt.Errorf("error reading Algolia res body for article in %s: %w", mon, err)
 		}
 
+		if res.StatusCode != http.StatusOK {
+			return 0, fmt.Errorf("error retrieving Algolia res: status code was %d", res.StatusCode)
+		}
+
 		var data algoliaRes
 		if err := json.Unmarshal(body, &data); err != nil {
 			return 0, fmt.Errorf("error unmarshaling Algolia res data for article in %s: %w", mon, err)
@@ -109,6 +113,11 @@ func getItem(id uint) ([]byte, error) {
 		body, err := io.ReadAll(res.Body)
 		if err != nil {
 			log.Printf("error reading item %d Firebase API res body: %v", id, err)
+			continue
+		}
+
+		if res.StatusCode != http.StatusOK {
+			log.Printf("error getting item %d from Firebase API: status code was %d", id, res.StatusCode)
 			continue
 		}
 
