@@ -104,13 +104,15 @@ pre {
 }
 
 .filter input {
+    box-sizing: border-box;
     width: 100%;
     max-width: 400px;
     padding: 0.4rem 0.8rem;
     margin-top: 0.3rem;
     border: 2px solid #e0e0e0;
     border-radius: 8px;
-    font-size: 0.9rem;
+    /* iOS Safari zooms in on focus when an input's font is under 16px */
+    font-size: 1rem;
     transition: border-color 0.3s ease;
 }
 
