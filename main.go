@@ -28,6 +28,10 @@ func main() {
 		log.Fatalf("Error parsing template: %v", err)
 	}
 
+	http.DefaultClient = &http.Client{
+		Timeout: 10 * time.Second,
+	}
+
 	fmt.Println("Getting story ID...")
 	storyID, err := getStoryID()
 	if err != nil {
