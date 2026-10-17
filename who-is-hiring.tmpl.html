@@ -37,7 +37,7 @@
   <div class="comments">
     {{range .Comments}}
       <div
-        class="content {{if .Remote}} remote {{end}}{{if .Interns}} interns {{end}}{{if .Visa}} visa {{end}}"
+        class="content {{if eq .Level 0}} post {{end}} {{if .Remote}} remote {{end}}{{if .Interns}} interns {{end}}{{if .Visa}} visa {{end}}"
         {{if gt .Level 0 }}style="margin-left: {{spacer .Level}}px"{{end}}
         id="comment_{{.ID}}"
       >
@@ -163,6 +163,10 @@ document.getElementById('query').addEventListener('change', function(e) {
   }
 });
 
+function isVisible(el) {
+  return el && el.offsetParent !== null;
+}
+
 document.addEventListener('click', function(e) {
   var target = e.target;
 
@@ -187,10 +191,7 @@ document.addEventListener('click', function(e) {
       var el = document.getElementById(target.dataset.scrollToId);
 
       // If the target element is hidden or doesn't exist, find the next visible one
-      if (!el || el.offsetParent === null || el.style.display === 'none' ||
-          el.classList.contains('remoteHidden') || el.classList.contains('internsHidden') ||
-          el.classList.contains('visaHidden') || el.classList.contains('queryHidden')) {
-
+      if (!isVisible(el)) {
         // Determine direction based on link text
         var isNext = target.innerText === 'Next';
         var currentComment = target.closest('.content');
@@ -202,12 +203,9 @@ document.addEventListener('click', function(e) {
           var step = isNext ? 1 : -1;
           for (var i = currentIndex + step; i >= 0 && i < allComments.length; i += step) {
             var candidateEl = allComments[i];
-            // Check if element is visible
-            if (candidateEl.offsetParent !== null && candidateEl.style.display !== 'none' &&
-                !candidateEl.classList.contains('remoteHidden') &&
-                !candidateEl.classList.contains('internsHidden') &&
-                !candidateEl.classList.contains('visaHidden') &&
-                !candidateEl.classList.contains('queryHidden')) {
+
+            // First visible root post in that direction
+            if (isVisible(candidateEl) && candidateEl.classList.contains('post')) {
               el = candidateEl;
               break;
             }
@@ -215,7 +213,7 @@ document.addEventListener('click', function(e) {
         }
       }
 
-      if (el && el.offsetParent !== null) {
+      if (isVisible(el)) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
 
