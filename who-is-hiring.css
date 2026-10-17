@@ -8,7 +8,7 @@ body {
 }
 
 .title {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #667eea;
     color: white;
     padding: 1.5rem 1rem;
     margin: 0 0 1rem 0;
