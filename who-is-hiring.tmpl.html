@@ -40,6 +40,7 @@
         class="content {{if eq .Level 0}} post {{end}} {{if .Remote}} remote {{end}}{{if .Interns}} interns {{end}}{{if .Visa}} visa {{end}}"
         {{if gt .Level 0 }}style="margin-left: {{spacer .Level}}px"{{end}}
         id="comment_{{.ID}}"
+        data-level="{{.Level}}"
       >
         <div class="close">&times;</div>
         <strong>by <a href="https://news.ycombinator.com/user?id={{.By}}">{{.By}}</a></strong>
@@ -167,12 +168,12 @@ function isVisible(el) {
   return el && el.offsetParent !== null;
 }
 
-// Removing a post also removes its replies, which follow it up to the next post.
+// Removing a comment also removes its replies, which are the comments right
+// after it that are nested deeper.
 function removeComment(comment) {
-  if (comment.classList.contains('post')) {
-    while (comment.nextElementSibling && !comment.nextElementSibling.classList.contains('post')) {
-      comment.parentNode.removeChild(comment.nextElementSibling);
-    }
+  var level = Number(comment.dataset.level);
+  while (comment.nextElementSibling && Number(comment.nextElementSibling.dataset.level) > level) {
+    comment.parentNode.removeChild(comment.nextElementSibling);
   }
   comment.parentNode.removeChild(comment);
 }
