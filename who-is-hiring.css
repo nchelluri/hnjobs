@@ -8,7 +8,7 @@ body {
 }
 
 .title {
-    background-color: #667eea;
+    background-color: #1d4a39;
     color: white;
     padding: 1.5rem 1rem;
     margin: 0 0 1rem 0;
@@ -42,7 +42,7 @@ body {
 }
 
 #text a {
-    color: #667eea;
+    color: #1f7a55;
     text-decoration: none;
 }
 
@@ -75,7 +75,7 @@ pre {
 }
 
 .filter button {
-    background: #667eea;
+    background: #1f7a55;
     color: white;
     border: none;
     padding: 0.5rem 1.2rem;
@@ -88,13 +88,13 @@ pre {
 }
 
 .filter button:hover {
-    background: #5a5cc9;
+    background: #18684a;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 8px rgba(31, 122, 85, 0.3);
 }
 
 .filter button.active {
-    background: #764ba2;
+    background: #123a2b;
 }
 
 .filter label {
@@ -118,7 +118,7 @@ pre {
 
 .filter input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #1f7a55;
 }
 
 .removed {
@@ -128,21 +128,26 @@ pre {
 }
 
 .removed button {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 0.5rem 1.2rem;
+    background: white;
+    color: #555;
+    border: 1px solid #d5dbd8;
+    padding: 0.4rem 1.1rem;
     border-radius: 25px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 500;
-    transition: all 0.3s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .removed button:hover {
-    background: #c0392b;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+    color: #1f7a55;
+    border-color: #1f7a55;
+    background: #f2f8f5;
+}
+
+.removed button:focus-visible {
+    outline: 2px solid #1f7a55;
+    outline-offset: 2px;
 }
 
 .comments {
@@ -162,8 +167,8 @@ pre {
 }
 
 .comments .content:hover {
-    border-color: #667eea;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    border-color: #1f7a55;
+    box-shadow: 0 4px 12px rgba(31, 122, 85, 0.15);
     transform: translateY(-2px);
 }
 
@@ -173,7 +178,7 @@ pre {
 }
 
 .comments .content strong a {
-    color: #667eea;
+    color: #1f7a55;
     text-decoration: none;
 }
 
@@ -189,7 +194,7 @@ pre {
 }
 
 .comments .content small a {
-    color: #667eea;
+    color: #1f7a55;
     text-decoration: none;
 }
 
@@ -198,7 +203,7 @@ pre {
 }
 
 .scrolly {
-    color: #667eea;
+    color: #1f7a55;
     text-decoration: none;
     padding: 0.2rem 0;
     border-radius: 4px;
@@ -301,7 +306,7 @@ a {
 }
 
 .footer a {
-    color: #667eea;
+    color: #1f7a55;
     text-decoration: none;
 }
 
