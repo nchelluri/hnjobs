@@ -167,6 +167,16 @@ function isVisible(el) {
   return el && el.offsetParent !== null;
 }
 
+// Removing a post also removes its replies, which follow it up to the next post.
+function removeComment(comment) {
+  if (comment.classList.contains('post')) {
+    while (comment.nextElementSibling && !comment.nextElementSibling.classList.contains('post')) {
+      comment.parentNode.removeChild(comment.nextElementSibling);
+    }
+  }
+  comment.parentNode.removeChild(comment);
+}
+
 document.addEventListener('click', function(e) {
   var target = e.target;
 
@@ -185,7 +195,7 @@ document.addEventListener('click', function(e) {
       localStorage.setItem("removed", JSON.stringify(removed));
     }
 
-    target.parentNode.parentNode.removeChild(target.parentNode);
+    removeComment(target.parentNode);
   } else if (target.tagName == 'A' && target.classList.contains('scrolly')) {
     if (target.dataset.scrollToId) {
       var el = document.getElementById(target.dataset.scrollToId);
@@ -233,7 +243,7 @@ if (removed) {
   Object.keys(removed).forEach(function(id) {
     var comment = document.getElementById(id);
     if (comment) {
-      comment.parentNode.removeChild(comment);
+      removeComment(comment);
     }
   });
 }
